@@ -28,12 +28,52 @@ public class Cell {
 	
 	private float x;
 	private float y;
+	private float xdest;
+	private float ydest;
+	private float dx;
+	private float dy;
+	
+	private static float speed = 2000;
 	
 	public Cell(int type, float x, float y) {
 		cellType = cellTypeValues[type];
 		tex = new Texture("pixel.png");
 		this.x = x;
 		this.y = y;
+	}
+	
+	public void setPosition(float x, float y) {
+		this.x = x;
+		this.y = y;
+	}
+	
+	public void setDestination(float xdest, float ydest) {
+		this.xdest = xdest;
+		this.ydest = ydest;
+		dx = xdest - x;
+		dy = ydest - y;
+		float dist = (float) Math.sqrt(dx * dx + dy * dy);
+		dx /= dist;
+		dy /= dist;
+		
+	}
+	
+	public boolean contains(float mx, float my) {
+		return mx > x && mx < x + SIZE &&
+				my > y && my < y + SIZE;
+	}
+	
+	public void update(float dt) {
+		x += dx * speed * dt;
+		y += dy * speed * dt;
+		if((dx < 0 && x <= xdest) || (dx > 0 && x >= xdest)) {
+			dx = 0;
+			x = xdest;
+		}
+		if((dy < 0 && y <= ydest) || (dy > 0 && y >= ydest)) {
+			dy = 0;
+			y = ydest;
+		}
 	}
 	
 	public void render(SpriteBatch sb) {

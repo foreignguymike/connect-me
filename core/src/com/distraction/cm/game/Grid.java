@@ -20,6 +20,10 @@ public class Grid {
 	private float x;
 	private float y;
 	
+	private int clickedRow;
+	private int clickedCol;
+	private Cell clickedCell;
+	
 	public Grid(int[][] types) {
 		
 		numRows = types.length;
@@ -45,9 +49,93 @@ public class Grid {
 		
 	}
 	
+	public void click(float mx, float my) {
+		for(int row = 0; row < numRows; row++) {
+			for(int col = 0; col < numCols; col++) {
+				if(grid[row][col].contains(mx, my)) {
+					clickedRow = row;
+					clickedCol = col;
+					clickedCell = grid[row][col];
+					break;
+				}
+			}
+		}
+	}
+	
+	public void move(int dx, int dy) {
+		if(clickedCell == null) {
+			return;
+		}
+		
+		if(dx > 0) {
+			if(clickedCol < numCols - 1) {
+				Cell temp = grid[clickedRow][clickedCol];
+				grid[clickedRow][clickedCol] = grid[clickedRow][clickedCol + 1];
+				grid[clickedRow][clickedCol + 1] = temp;
+				grid[clickedRow][clickedCol].setDestination(
+						x + clickedCol * Cell.SIZE,
+						y + (numRows - clickedRow - 1) * Cell.SIZE);
+				grid[clickedRow][clickedCol + 1].setDestination(
+						x + (clickedCol + 1) * Cell.SIZE,
+						y + (numRows - clickedRow - 1) * Cell.SIZE);
+				clickedCell = null;
+			}
+		}
+		else if(dx < 0) {
+			if(clickedCol > 0) {
+				Cell temp = grid[clickedRow][clickedCol];
+				grid[clickedRow][clickedCol] = grid[clickedRow][clickedCol - 1];
+				grid[clickedRow][clickedCol - 1] = temp;
+				grid[clickedRow][clickedCol].setDestination(
+						x + clickedCol * Cell.SIZE,
+						y + (numRows - clickedRow - 1) * Cell.SIZE);
+				grid[clickedRow][clickedCol - 1].setDestination(
+						x + (clickedCol - 1) * Cell.SIZE,
+						y + (numRows - clickedRow - 1) * Cell.SIZE);
+				clickedCell = null;
+			}
+		}
+		else if(dy > 0) {
+			if(clickedRow > 0) {
+				Cell temp = grid[clickedRow][clickedCol];
+				grid[clickedRow][clickedCol] = grid[clickedRow - 1][clickedCol];
+				grid[clickedRow - 1][clickedCol] = temp;
+				grid[clickedRow][clickedCol].setDestination(
+						x + clickedCol * Cell.SIZE,
+						y + (numRows - clickedRow - 1) * Cell.SIZE);
+				grid[clickedRow - 1][clickedCol].setDestination(
+						x + clickedCol * Cell.SIZE,
+						y + (numRows - clickedRow - 0) * Cell.SIZE);
+				clickedCell = null;
+			}
+		}
+		else if(dy < 0) {
+			if(clickedRow < numRows - 1) {
+				Cell temp = grid[clickedRow][clickedCol];
+				grid[clickedRow][clickedCol] = grid[clickedRow + 1][clickedCol];
+				grid[clickedRow + 1][clickedCol] = temp;
+				grid[clickedRow][clickedCol].setDestination(
+						x + clickedCol * Cell.SIZE,
+						y + (numRows - clickedRow - 1) * Cell.SIZE);
+				grid[clickedRow + 1][clickedCol].setDestination(
+						x + clickedCol * Cell.SIZE,
+						y + (numRows - clickedRow - 2) * Cell.SIZE);
+				clickedCell = null;
+			}
+		}
+	}
+	
+	public void update(float dt) {
+		for(int row = 0; row < numRows; row++) {
+			for(int col = 0; col < numCols; col++) {
+				grid[row][col].update(dt);
+			}
+		}
+	}
+	
 	public void render(SpriteBatch sb) {
 		
-		sb.setColor(Color.BLACK);
+		sb.setColor(bgColor);
 		sb.draw(tex,
 				x - Cell.PADDING,
 				y - Cell.PADDING,
