@@ -4,7 +4,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.distraction.cm.state.GSM;
-import com.distraction.cm.state.TestState;
+import com.distraction.cm.state.PlayState;
 
 public class CM extends ApplicationAdapter {
 	
@@ -18,10 +18,12 @@ public class CM extends ApplicationAdapter {
 	@Override
 	public void create () {
 		
+		Gdx.gl.glClearColor(0.9f, 0.9f, 0.9f, 1);
+		
 		sb = new SpriteBatch();
 		
 		gsm = new GSM();
-		gsm.push(new TestState(gsm));
+		gsm.push(new PlayState(gsm));
 		
 	}
 
