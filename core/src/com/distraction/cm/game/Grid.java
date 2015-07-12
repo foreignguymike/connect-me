@@ -4,18 +4,18 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.distraction.cm.CM;
 import com.distraction.cm.game.Cell.CellType;
+import com.distraction.cm.util.Content;
 
 public class Grid {
 	
 	public static int PADDING = 20;
 	public static int SIZE = CM.WIDTH - PADDING * 2;
 	
-	private Color bgColor = new Color(0, 0, 0, 1);
-	private Texture tex;
+	private TextureRegion bg;
 	
 	private Cell[][] grid;
 	private int numRows;
@@ -51,7 +51,7 @@ public class Grid {
 			}
 		}
 		
-		tex = new Texture("pixel.png");
+		bg = Content.getInstance().getAtlas().findRegion("grid");
 		
 	}
 	
@@ -223,8 +223,8 @@ public class Grid {
 	
 	public void render(SpriteBatch sb) {
 		
-		sb.setColor(bgColor);
-		sb.draw(tex,
+		sb.setColor(Color.WHITE);
+		sb.draw(bg,
 				x - Cell.PADDING,
 				y - Cell.PADDING,
 				SIZE + Cell.PADDING * 2,

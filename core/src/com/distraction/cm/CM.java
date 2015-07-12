@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.distraction.cm.state.GSM;
 import com.distraction.cm.state.PlayState;
+import com.distraction.cm.util.Content;
 
 public class CM extends ApplicationAdapter {
 	
@@ -20,10 +21,14 @@ public class CM extends ApplicationAdapter {
 		
 		Gdx.gl.glClearColor(0.9f, 0.9f, 0.9f, 1);
 		
+		Content.getInstance().loadAtlas("pack/pack.pack");
+		
 		sb = new SpriteBatch();
 		
 		gsm = new GSM();
 		gsm.push(new PlayState(gsm));
+		
+		
 		
 	}
 

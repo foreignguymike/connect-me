@@ -3,19 +3,26 @@ package com.distraction.cm.game;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.distraction.cm.util.Content;
 
 public class Cell {
 	
 	public enum CellType {
-		RED(Color.RED),
-		GREEN(Color.GREEN),
-		BLUE(Color.BLUE);
+		RED(Color.RED, "cell_red"),
+		GREEN(Color.GREEN, "cell_green"),
+		BLUE(Color.BLUE, "cell_blue");
 		Color color;
-		private CellType(Color color) {
+		String name;
+		private CellType(Color color, String name) {
 			this.color = color;
+			this.name = name;
 		}
 		public Color getColor() {
 			return color;
+		}
+		public String getName() {
+			return name;
 		}
 	}
 	public static CellType[] cellTypeValues = CellType.values();
@@ -35,11 +42,14 @@ public class Cell {
 	
 	private static float speed = 2000;
 	
+	private TextureRegion bg;
+	
 	public Cell(int type, float x, float y) {
 		cellType = cellTypeValues[type];
 		tex = new Texture("pixel.png");
 		this.x = x;
 		this.y = y;
+		bg = Content.getInstance().getAtlas().findRegion(cellType.getName());
 	}
 	
 	public void setPosition(float x, float y) {
@@ -80,8 +90,8 @@ public class Cell {
 	}
 	
 	public void render(SpriteBatch sb) {
-		sb.setColor(cellType.getColor());
-		sb.draw(tex,
+		sb.setColor(Color.WHITE);
+		sb.draw(bg,
 				x + PADDING,
 				y + PADDING,
 				SIZE - PADDING * 2,
