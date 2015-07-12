@@ -1,9 +1,9 @@
 package com.distraction.cm.game;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.distraction.cm.util.AnimationListener;
 import com.distraction.cm.util.Content;
 
 public class Cell {
@@ -31,7 +31,6 @@ public class Cell {
 	public static int PADDING = 10;
 	
 	private CellType cellType;
-	private Texture tex;
 	
 	private float x;
 	private float y;
@@ -40,16 +39,21 @@ public class Cell {
 	private float dx;
 	private float dy;
 	
-	private static float speed = 2000;
+	private static float speed = 1000;
 	
 	private TextureRegion bg;
 	
+	private AnimationListener listener;
+	
 	public Cell(int type, float x, float y) {
 		cellType = cellTypeValues[type];
-		tex = new Texture("pixel.png");
 		this.x = x;
 		this.y = y;
 		bg = Content.getInstance().getAtlas().findRegion(cellType.getName());
+	}
+	
+	public void setListener(AnimationListener listener) {
+		this.listener = listener;
 	}
 	
 	public void setPosition(float x, float y) {
@@ -65,6 +69,7 @@ public class Cell {
 		float dist = (float) Math.sqrt(dx * dx + dy * dy);
 		dx /= dist;
 		dy /= dist;
+		listener.onStarted();
 	}
 	
 	public CellType getType() {
@@ -86,6 +91,9 @@ public class Cell {
 		if((dy < 0 && y <= ydest) || (dy > 0 && y >= ydest)) {
 			dy = 0;
 			y = ydest;
+		}
+		if(x == xdest && y == ydest) {
+			listener.onFinished();
 		}
 	}
 	

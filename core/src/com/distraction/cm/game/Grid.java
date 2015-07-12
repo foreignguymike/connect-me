@@ -8,14 +8,18 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.distraction.cm.CM;
 import com.distraction.cm.game.Cell.CellType;
+import com.distraction.cm.util.AnimationListener;
 import com.distraction.cm.util.Content;
 
-public class Grid {
+public class Grid implements AnimationListener {
 	
 	public static int PADDING = 20;
-	public static int SIZE = CM.WIDTH - PADDING * 2;
+	public static int WIDTH = CM.WIDTH - PADDING * 2;
+	public static int HEIGHT;
 	
 	private TextureRegion bg;
+	private TextureRegion pixel;
+	private Color checkeredColor = new Color(0, 0, 0, 0.1f);
 	
 	private Cell[][] grid;
 	private int numRows;
@@ -36,10 +40,11 @@ public class Grid {
 		numCols = types[0].length;
 		grid = new Cell[numRows][numCols];
 		
-		Cell.SIZE = SIZE / numCols;
+		Cell.SIZE = WIDTH / numCols;
+		HEIGHT = numRows * Cell.SIZE;
 		
 		x = PADDING;
-		y = (CM.HEIGHT - SIZE) / 2;
+		y = (CM.HEIGHT - HEIGHT) / 2;
 		
 		for(int row = 0; row < numRows; row++) {
 			for(int col = 0; col < numCols; col++) {
@@ -47,11 +52,13 @@ public class Grid {
 						types[row][col],
 						x + col * Cell.SIZE,
 						y + (numRows - row - 1) * Cell.SIZE);
+				cell.setListener(this);
 				grid[row][col] = cell;
 			}
 		}
 		
 		bg = Content.getInstance().getAtlas().findRegion("grid");
+		pixel = Content.getInstance().getAtlas().findRegion("pixel");
 		
 	}
 	
@@ -69,6 +76,11 @@ public class Grid {
 	}
 	
 	public void move(int dx, int dy) {
+		
+		if(animationCount > 0) {
+			return;
+		}
+		
 		if(clickedCell == null) {
 			return;
 		}
@@ -225,17 +237,35 @@ public class Grid {
 		
 		sb.setColor(Color.WHITE);
 		sb.draw(bg,
-				x - Cell.PADDING,
-				y - Cell.PADDING,
-				SIZE + Cell.PADDING * 2,
-				SIZE + Cell.PADDING * 2);
+				x,
+				y,
+				WIDTH,
+				HEIGHT);
 		
 		for(int row = 0; row < numRows; row++) {
 			for(int col = 0; col < numCols; col++) {
+				if((row + col) % 2 == 0) {
+					sb.setColor(checkeredColor);
+					sb.draw(pixel, x + col * Cell.SIZE, y + (numRows - row - 1) * Cell.SIZE, Cell.SIZE, Cell.SIZE);
+				}
 				grid[row][col].render(sb);
 			}
 		}
 		
+	}
+	
+	///////////////////////////////////
+	
+	private int animationCount;
+	
+	@Override
+	public void onStarted() {
+		animationCount++;
+	}
+	
+	@Override
+	public void onFinished() {
+		animationCount--;
 	}
 	
 }

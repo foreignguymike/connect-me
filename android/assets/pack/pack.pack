@@ -5,29 +5,36 @@ filter: Nearest,Nearest
 repeat: none
 grid
   rotate: false
-  xy: 1, 1
-  size: 443, 443
-  orig: 443, 443
+  xy: 1, 4
+  size: 445, 445
+  orig: 445, 445
   offset: 0, 0
   index: -1
 cell_blue
   rotate: false
-  xy: 446, 341
-  size: 103, 103
-  orig: 103, 103
+  xy: 448, 364
+  size: 85, 85
+  orig: 85, 85
   offset: 0, 0
   index: -1
 cell_green
   rotate: false
-  xy: 446, 236
-  size: 103, 103
-  orig: 103, 103
+  xy: 448, 277
+  size: 85, 85
+  orig: 85, 85
   offset: 0, 0
   index: -1
 cell_red
   rotate: false
-  xy: 551, 341
-  size: 103, 103
-  orig: 103, 103
+  xy: 535, 364
+  size: 85, 85
+  orig: 85, 85
+  offset: 0, 0
+  index: -1
+pixel
+  rotate: false
+  xy: 1, 1
+  size: 1, 1
+  orig: 1, 1
   offset: 0, 0
   index: -1

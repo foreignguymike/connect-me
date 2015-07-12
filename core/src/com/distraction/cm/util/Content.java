@@ -1,5 +1,6 @@
 package com.distraction.cm.util;
 
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
 public class Content {
@@ -17,6 +18,7 @@ public class Content {
 	
 	public void loadAtlas(String path) {
 		atlas = new TextureAtlas(path);
+		atlas.getTextures().first().setFilter(TextureFilter.Linear, TextureFilter.Linear);
 	}
 	
 	public TextureAtlas getAtlas() {
