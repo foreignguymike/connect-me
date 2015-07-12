@@ -19,9 +19,10 @@ public class PlayState extends State {
 		super(gsm);
 		
 		int[][] g = {
-				{0, 1, 0},
-				{1, 2, 2},
-				{2, 0, 2}
+				{0, 1, 0, 2},
+				{1, 2, 2, 1},
+				{2, 0, 2, 0},
+				{1, 1, 0, 2}
 		};
 		grid = new Grid(g);
 		
