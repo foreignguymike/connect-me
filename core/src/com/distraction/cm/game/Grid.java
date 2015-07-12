@@ -265,6 +265,7 @@ public class Grid implements AnimationListener {
 	
 	@Override
 	public void onFinished() {
+		System.out.println("on finished");
 		animationCount--;
 	}
 	

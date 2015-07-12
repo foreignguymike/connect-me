@@ -87,13 +87,16 @@ public class Cell {
 		if((dx < 0 && x <= xdest) || (dx > 0 && x >= xdest)) {
 			dx = 0;
 			x = xdest;
+			if(y == ydest) {
+				listener.onFinished();
+			}
 		}
 		if((dy < 0 && y <= ydest) || (dy > 0 && y >= ydest)) {
 			dy = 0;
 			y = ydest;
-		}
-		if(x == xdest && y == ydest) {
-			listener.onFinished();
+			if(x == xdest) {
+				listener.onFinished();
+			}
 		}
 	}
 	
