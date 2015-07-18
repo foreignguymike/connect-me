@@ -3,30 +3,30 @@ pack.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-grid
+grid_cell
   rotate: false
-  xy: 1, 4
-  size: 445, 445
-  orig: 445, 445
+  xy: 1, 91
+  size: 151, 151
+  orig: 151, 151
   offset: 0, 0
   index: -1
 cell_blue
   rotate: false
-  xy: 448, 364
+  xy: 1, 4
   size: 85, 85
   orig: 85, 85
   offset: 0, 0
   index: -1
 cell_green
   rotate: false
-  xy: 448, 277
+  xy: 154, 157
   size: 85, 85
   orig: 85, 85
   offset: 0, 0
   index: -1
 cell_red
   rotate: false
-  xy: 535, 364
+  xy: 88, 4
   size: 85, 85
   orig: 85, 85
   offset: 0, 0

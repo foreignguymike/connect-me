@@ -4,6 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.distraction.cm.game.Grid;
+import com.distraction.cm.game.LevelData;
+import com.distraction.cm.game.LevelFactory;
+import com.distraction.cm.util.Screenshot;
 
 public class PlayState extends State {
 	
@@ -14,16 +17,15 @@ public class PlayState extends State {
 	private float startx;
 	private float starty;
 	
+	private int minMoves;
+	
 	public PlayState(GSM gsm) {
 		
 		super(gsm);
 		
-		int[][] g = {
-				{0, 1, 0},
-				{1, 2, 2},
-				{2, 0, 2}
-		};
-		grid = new Grid(g);
+		LevelData data = LevelFactory.getLevel(3);
+		grid = new Grid(data.getGrid());
+		minMoves = data.getMinMoves();
 		
 	}
 	
@@ -36,6 +38,7 @@ public class PlayState extends State {
 			grid.click(m.x, m.y);
 			startx = m.x;
 			starty = m.y;
+			Screenshot.save();
 		}
 		else if(Gdx.input.isTouched()) {
 			m.x = Gdx.input.getX();

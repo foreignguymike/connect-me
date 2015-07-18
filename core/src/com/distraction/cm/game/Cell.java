@@ -28,7 +28,7 @@ public class Cell {
 	public static CellType[] cellTypeValues = CellType.values();
 	
 	public static int SIZE;
-	public static int PADDING = 10;
+	public static int PADDING;
 	
 	private CellType cellType;
 	

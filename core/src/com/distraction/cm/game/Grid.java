@@ -19,7 +19,7 @@ public class Grid implements AnimationListener {
 	
 	private TextureRegion bg;
 	private TextureRegion pixel;
-	private Color checkeredColor = new Color(0, 0, 0, 0.1f);
+	private Color checkeredColor = new Color(0, 0, 0, 0.2f);
 	
 	private Cell[][] grid;
 	private int numRows;
@@ -41,6 +41,7 @@ public class Grid implements AnimationListener {
 		grid = new Cell[numRows][numCols];
 		
 		Cell.SIZE = WIDTH / numCols;
+		Cell.PADDING = 2 * Cell.SIZE / 14;
 		HEIGHT = numRows * Cell.SIZE;
 		
 		x = PADDING;
@@ -57,7 +58,7 @@ public class Grid implements AnimationListener {
 			}
 		}
 		
-		bg = Content.getInstance().getAtlas().findRegion("grid");
+		bg = Content.getInstance().getAtlas().findRegion("grid_cell");
 		pixel = Content.getInstance().getAtlas().findRegion("pixel");
 		
 	}
@@ -236,11 +237,16 @@ public class Grid implements AnimationListener {
 	public void render(SpriteBatch sb) {
 		
 		sb.setColor(Color.WHITE);
-		sb.draw(bg,
-				x,
-				y,
-				WIDTH,
-				HEIGHT);
+		for(int row = 0; row < numRows; row++) {
+			for(int col = 0; col < numCols; col++) {
+				sb.draw(bg, x + col * Cell.SIZE, y + row * Cell.SIZE, Cell.SIZE, Cell.SIZE);
+				if((row + col) % 2 == 0) {
+					sb.setColor(checkeredColor);
+					sb.draw(pixel, x + col * Cell.SIZE, y + (numRows - row - 1) * Cell.SIZE, Cell.SIZE, Cell.SIZE);
+					sb.setColor(Color.WHITE);
+				}
+			}
+		}
 		
 		for(int row = 0; row < numRows; row++) {
 			for(int col = 0; col < numCols; col++) {
@@ -265,7 +271,6 @@ public class Grid implements AnimationListener {
 	
 	@Override
 	public void onFinished() {
-		System.out.println("on finished");
 		animationCount--;
 	}
 	

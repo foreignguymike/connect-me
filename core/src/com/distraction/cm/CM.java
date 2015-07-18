@@ -10,7 +10,7 @@ import com.distraction.cm.util.Content;
 public class CM extends ApplicationAdapter {
 	
 	public static final String TITLE = "Connect Me!";
-	public static int WIDTH = 480;
+	public static int WIDTH = 450;
 	public static int HEIGHT = 800;
 	
 	private SpriteBatch sb;
@@ -19,7 +19,7 @@ public class CM extends ApplicationAdapter {
 	@Override
 	public void create () {
 		
-		Gdx.gl.glClearColor(0.9f, 0.9f, 0.9f, 1);
+		Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
 		
 		Content.getInstance().loadAtlas("pack/pack.pack");
 		
