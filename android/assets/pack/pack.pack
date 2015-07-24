@@ -3,11 +3,18 @@ pack.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-grid_cell
+grid_bg
   rotate: false
   xy: 1, 91
-  size: 151, 151
-  orig: 151, 151
+  size: 411, 411
+  orig: 411, 411
+  offset: 0, 0
+  index: -1
+grid_cell
+  rotate: false
+  xy: 414, 355
+  size: 147, 147
+  orig: 147, 147
   offset: 0, 0
   index: -1
 cell_blue
@@ -19,16 +26,44 @@ cell_blue
   index: -1
 cell_green
   rotate: false
-  xy: 154, 157
+  xy: 414, 268
   size: 85, 85
   orig: 85, 85
   offset: 0, 0
   index: -1
 cell_red
   rotate: false
-  xy: 88, 4
+  xy: 563, 417
   size: 85, 85
   orig: 85, 85
+  offset: 0, 0
+  index: -1
+star_off
+  rotate: false
+  xy: 88, 32
+  size: 57, 57
+  orig: 57, 57
+  offset: 0, 0
+  index: -1
+star_on
+  rotate: false
+  xy: 414, 209
+  size: 57, 57
+  orig: 57, 57
+  offset: 0, 0
+  index: -1
+back
+  rotate: false
+  xy: 501, 305
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: -1
+refresh
+  rotate: false
+  xy: 563, 367
+  size: 48, 48
+  orig: 48, 48
   offset: 0, 0
   index: -1
 pixel

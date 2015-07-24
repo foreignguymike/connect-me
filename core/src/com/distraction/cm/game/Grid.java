@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.distraction.cm.CM;
 import com.distraction.cm.game.Cell.CellType;
 import com.distraction.cm.util.AnimationListener;
-import com.distraction.cm.util.Content;
+import com.distraction.cm.util.Res;
 
 public class Grid implements AnimationListener {
 	
@@ -18,8 +18,7 @@ public class Grid implements AnimationListener {
 	public static int HEIGHT;
 	
 	private TextureRegion bg;
-	private TextureRegion pixel;
-	private Color checkeredColor = new Color(0, 0, 0, 0.2f);
+	private Color bgColor = new Color(0x594d40ff);
 	
 	private Cell[][] grid;
 	private int numRows;
@@ -41,11 +40,11 @@ public class Grid implements AnimationListener {
 		grid = new Cell[numRows][numCols];
 		
 		Cell.SIZE = WIDTH / numCols;
-		Cell.PADDING = 2 * Cell.SIZE / 14;
+		Cell.PADDING = 2 * Cell.SIZE / 32;
 		HEIGHT = numRows * Cell.SIZE;
 		
 		x = PADDING;
-		y = (CM.HEIGHT - HEIGHT) / 2;
+		y = 2 * (CM.HEIGHT - HEIGHT) / 5;
 		
 		for(int row = 0; row < numRows; row++) {
 			for(int col = 0; col < numCols; col++) {
@@ -54,12 +53,12 @@ public class Grid implements AnimationListener {
 						x + col * Cell.SIZE,
 						y + (numRows - row - 1) * Cell.SIZE);
 				cell.setListener(this);
+				cell.setTimer((row + col) * -0.1f);
 				grid[row][col] = cell;
 			}
 		}
 		
-		bg = Content.getInstance().getAtlas().findRegion("grid_cell");
-		pixel = Content.getInstance().getAtlas().findRegion("pixel");
+		bg = Res.getAtlas().findRegion("grid_bg");
 		
 	}
 	
@@ -99,10 +98,6 @@ public class Grid implements AnimationListener {
 						y + (numRows - clickedRow - 1) * Cell.SIZE);
 				clickedCell = null;
 				numMoves++;
-				if(isFinished()) {
-					System.out.println("numMoves: " + numMoves);
-					System.out.println("finished");
-				}
 			}
 		}
 		else if(dx < 0) {
@@ -118,10 +113,6 @@ public class Grid implements AnimationListener {
 						y + (numRows - clickedRow - 1) * Cell.SIZE);
 				clickedCell = null;
 				numMoves++;
-				if(isFinished()) {
-					System.out.println("numMoves: " + numMoves);
-					System.out.println("finished");
-				}
 			}
 		}
 		else if(dy > 0) {
@@ -137,10 +128,6 @@ public class Grid implements AnimationListener {
 						y + (numRows - clickedRow - 0) * Cell.SIZE);
 				clickedCell = null;
 				numMoves++;
-				if(isFinished()) {
-					System.out.println("numMoves: " + numMoves);
-					System.out.println("finished");
-				}
 			}
 		}
 		else if(dy < 0) {
@@ -156,10 +143,6 @@ public class Grid implements AnimationListener {
 						y + (numRows - clickedRow - 2) * Cell.SIZE);
 				clickedCell = null;
 				numMoves++;
-				if(isFinished()) {
-					System.out.println("numMoves: " + numMoves);
-					System.out.println("finished");
-				}
 			}
 		}
 	}
@@ -179,6 +162,14 @@ public class Grid implements AnimationListener {
 			}
 		}
 		return true;
+	}
+	
+	private void drop() {
+		for(int row = 0; row < numRows; row++) {
+			for(int col = 0; col < numCols; col++) {
+				grid[row][col].drop();
+			}
+		}
 	}
 	
 	private static class Index {
@@ -236,24 +227,11 @@ public class Grid implements AnimationListener {
 	
 	public void render(SpriteBatch sb) {
 		
-		sb.setColor(Color.WHITE);
-		for(int row = 0; row < numRows; row++) {
-			for(int col = 0; col < numCols; col++) {
-				sb.draw(bg, x + col * Cell.SIZE, y + row * Cell.SIZE, Cell.SIZE, Cell.SIZE);
-				if((row + col) % 2 == 0) {
-					sb.setColor(checkeredColor);
-					sb.draw(pixel, x + col * Cell.SIZE, y + (numRows - row - 1) * Cell.SIZE, Cell.SIZE, Cell.SIZE);
-					sb.setColor(Color.WHITE);
-				}
-			}
-		}
+		sb.setColor(bgColor);
+		sb.draw(bg, x - Cell.PADDING, y - Cell.PADDING, WIDTH + Cell.PADDING * 2, HEIGHT + Cell.PADDING * 2);
 		
 		for(int row = 0; row < numRows; row++) {
 			for(int col = 0; col < numCols; col++) {
-				if((row + col) % 2 == 0) {
-					sb.setColor(checkeredColor);
-					sb.draw(pixel, x + col * Cell.SIZE, y + (numRows - row - 1) * Cell.SIZE, Cell.SIZE, Cell.SIZE);
-				}
 				grid[row][col].render(sb);
 			}
 		}
@@ -272,6 +250,11 @@ public class Grid implements AnimationListener {
 	@Override
 	public void onFinished() {
 		animationCount--;
+		if(isFinished()) {
+			System.out.println("numMoves: " + numMoves);
+			System.out.println("finished");
+			drop();
+		}
 	}
 	
 }

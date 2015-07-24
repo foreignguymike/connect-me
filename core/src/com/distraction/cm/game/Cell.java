@@ -4,14 +4,14 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.distraction.cm.util.AnimationListener;
-import com.distraction.cm.util.Content;
+import com.distraction.cm.util.Res;
 
 public class Cell {
 	
 	public enum CellType {
-		RED(Color.RED, "cell_red"),
-		GREEN(Color.GREEN, "cell_green"),
-		BLUE(Color.BLUE, "cell_blue");
+		RED(new Color(0xff4d4dff), "cell_red"),
+		GREEN(new Color(0x4dff4dff), "cell_green"),
+		BLUE(new Color(0x4d4dffff), "cell_blue");
 		Color color;
 		String name;
 		private CellType(Color color, String name) {
@@ -41,15 +41,21 @@ public class Cell {
 	
 	private static float speed = 1000;
 	
+	private static float introTime = 0.2f;
+	private float timer = 0;
+	private float size = 0;
+	
 	private TextureRegion bg;
 	
 	private AnimationListener listener;
+	
+	private boolean drop;
 	
 	public Cell(int type, float x, float y) {
 		cellType = cellTypeValues[type];
 		this.x = x;
 		this.y = y;
-		bg = Content.getInstance().getAtlas().findRegion(cellType.getName());
+		bg = Res.getAtlas().findRegion("grid_cell");
 	}
 	
 	public void setListener(AnimationListener listener) {
@@ -59,6 +65,10 @@ public class Cell {
 	public void setPosition(float x, float y) {
 		this.x = x;
 		this.y = y;
+	}
+	
+	public void setTimer(float f) {
+		timer = f;
 	}
 	
 	public void setDestination(float xdest, float ydest) {
@@ -81,32 +91,58 @@ public class Cell {
 				my > y && my < y + SIZE;
 	}
 	
+	public void drop() {
+		drop = true;
+		dx = (float) (Math.random() * 1000 - 500);
+		dy = (float) (Math.random() * 500 + 1500);
+	}
+	
 	public void update(float dt) {
-		x += dx * speed * dt;
-		y += dy * speed * dt;
-		if((dx < 0 && x <= xdest) || (dx > 0 && x >= xdest)) {
-			dx = 0;
-			x = xdest;
-			if(y == ydest) {
-				listener.onFinished();
+		if(drop) {
+			x += dx * dt;
+			y += dy * dt;
+			dy -= 8000 * dt;
+			return;
+		}
+		if(timer < introTime) {
+			timer += dt;
+			if(timer >= introTime) {
+				timer = introTime;
+			}
+			if(timer < 0) {
+				size = 0;
+			}
+			else {
+				size = (timer / introTime) * (SIZE - PADDING * 2);
 			}
 		}
-		if((dy < 0 && y <= ydest) || (dy > 0 && y >= ydest)) {
-			dy = 0;
-			y = ydest;
-			if(x == xdest) {
-				listener.onFinished();
+		
+		if(dx != 0 || dy != 0) {
+			x += dx * speed * dt;
+			y += dy * speed * dt;
+			if((dx < 0 && x <= xdest) || (dx > 0 && x >= xdest)) {
+				dx = 0;
+				x = xdest;
+				if(y == ydest) {
+					listener.onFinished();
+				}
+			}
+			if((dy < 0 && y <= ydest) || (dy > 0 && y >= ydest)) {
+				dy = 0;
+				y = ydest;
+				if(x == xdest) {
+					listener.onFinished();
+				}
 			}
 		}
 	}
 	
 	public void render(SpriteBatch sb) {
-		sb.setColor(Color.WHITE);
+		sb.setColor(cellType.getColor());
 		sb.draw(bg,
-				x + PADDING,
-				y + PADDING,
-				SIZE - PADDING * 2,
-				SIZE - PADDING * 2);
+				x + Cell.SIZE / 2 - size / 2,
+				y + Cell.SIZE / 2 - size / 2,
+				size, size);
 	}
 	
 }

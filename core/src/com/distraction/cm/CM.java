@@ -4,8 +4,8 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.distraction.cm.state.GSM;
-import com.distraction.cm.state.PlayState;
-import com.distraction.cm.util.Content;
+import com.distraction.cm.state.LevelSelectState;
+import com.distraction.cm.util.Res;
 
 public class CM extends ApplicationAdapter {
 	
@@ -17,18 +17,24 @@ public class CM extends ApplicationAdapter {
 	private GSM gsm;
 	
 	@Override
+	public void resume() {
+		Res.init();
+		Res.loadAtlas("pack/pack.pack");
+		super.resume();
+	}
+	
+	@Override
 	public void create () {
 		
-		Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
+		Gdx.gl.glClearColor(1f, 0.99f, 0.98f, 1);
 		
-		Content.getInstance().loadAtlas("pack/pack.pack");
+		Res.init();
+		Res.loadAtlas("pack/pack.pack");
 		
 		sb = new SpriteBatch();
 		
 		gsm = new GSM();
-		gsm.push(new PlayState(gsm));
-		
-		
+		gsm.push(new LevelSelectState(gsm));
 		
 	}
 
