@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.distraction.cm.state.GSM;
 import com.distraction.cm.state.LevelSelectState;
 import com.distraction.cm.util.Res;
+import com.distraction.cm.util.Save;
 
 public class CM extends ApplicationAdapter {
 	
@@ -27,6 +28,8 @@ public class CM extends ApplicationAdapter {
 	public void create () {
 		
 		Gdx.gl.glClearColor(1f, 0.99f, 0.98f, 1);
+		
+		Save.load();
 		
 		Res.init();
 		Res.loadAtlas("pack/pack.pack");

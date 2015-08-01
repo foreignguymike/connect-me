@@ -9,8 +9,10 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.distraction.cm.CM;
 import com.distraction.cm.game.Header;
+import com.distraction.cm.game.LevelData;
 import com.distraction.cm.util.ClickListener;
 import com.distraction.cm.util.LevelItem;
+import com.distraction.cm.util.Save;
 
 public class LevelSelectState extends State {
 	
@@ -46,8 +48,8 @@ public class LevelSelectState extends State {
 		});
 		
 		list = new ArrayList<LevelItem>();
-		for(int i = 0; i < 2000; i++) {
-			LevelItem item = new LevelItem("Level " + (i + 1), (int) (Math.random() * 5));
+		for(int i = 0; i < LevelData.NUM_LEVELS; i++) {
+			LevelItem item = new LevelItem("Level " + (i + 1), Save.getNumStars(i));
 			item.setIndex(i);
 			list.add(item);
 		}

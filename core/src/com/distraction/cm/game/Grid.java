@@ -9,7 +9,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.distraction.cm.CM;
 import com.distraction.cm.game.Cell.CellType;
 import com.distraction.cm.util.AnimationListener;
+import com.distraction.cm.util.GridListener;
 import com.distraction.cm.util.Res;
+import com.distraction.cm.util.Save;
 
 public class Grid implements AnimationListener {
 	
@@ -32,6 +34,8 @@ public class Grid implements AnimationListener {
 	private Cell clickedCell;
 	
 	private int numMoves;
+	
+	private GridListener listener;
 	
 	public Grid(int[][] types) {
 		
@@ -60,6 +64,14 @@ public class Grid implements AnimationListener {
 		
 		bg = Res.getAtlas().findRegion("grid_bg");
 		
+	}
+	
+	public void setListener(GridListener listener) {
+		this.listener = listener;
+	}
+	
+	public int getNumMoves() {
+		return numMoves;
 	}
 	
 	public void click(float mx, float my) {
@@ -250,10 +262,11 @@ public class Grid implements AnimationListener {
 	@Override
 	public void onFinished() {
 		animationCount--;
-		if(isFinished()) {
+		if(animationCount == 0 && isFinished()) {
 			System.out.println("numMoves: " + numMoves);
 			System.out.println("finished");
-			drop();
+//			drop();
+			listener.onFinished();
 		}
 	}
 	

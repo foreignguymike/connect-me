@@ -8,6 +8,8 @@ import com.distraction.cm.game.Header;
 import com.distraction.cm.game.LevelData;
 import com.distraction.cm.game.LevelFactory;
 import com.distraction.cm.util.ClickListener;
+import com.distraction.cm.util.GridListener;
+import com.distraction.cm.util.Save;
 
 public class PlayState extends State {
 	
@@ -19,17 +21,20 @@ public class PlayState extends State {
 	private float startx;
 	private float starty;
 	
-	public PlayState(final GSM gsm, int level, int stars) {
+	private int level;
+	private int moves;
+	
+	public PlayState(final GSM gsm, int level, int moves) {
 		
 		super(gsm);
+		this.level = level;
+		this.moves = moves;
 		
-		final LevelData data = LevelFactory.getLevel(level);
-		System.out.println("created level " + level + " with " + stars + " stars");
-		grid = new Grid(data.getGrid());
+		createGrid();
 		
 		header = new Header();
 		header.setTitle("Level " + level);
-		header.setStars(stars);
+		header.setStars(Save.getNumStars(level - 1));
 		header.setBackClickListener(new ClickListener() {
 			@Override
 			public void onClick() {
@@ -41,12 +46,25 @@ public class PlayState extends State {
 		header.setRefreshClickListener(new ClickListener() {
 			@Override
 			public void onClick() {
-				grid = new Grid(data.getGrid());
+				createGrid();
 			}
 		});
 		
 		Gdx.input.setInputProcessor(this);
 		
+	}
+	
+	private void createGrid() {
+		final LevelData data = LevelFactory.getLevel(level);
+		System.out.println("created level " + level);
+		grid = new Grid(data.getGrid());
+		grid.setListener(new GridListener() {
+			@Override
+			public void onFinished() {
+				Save.set(level - 1, grid.getNumMoves());
+				Save.save();
+			}
+		});
 	}
 	
 	@Override

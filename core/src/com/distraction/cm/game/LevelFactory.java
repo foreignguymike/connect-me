@@ -45,7 +45,7 @@ public abstract class LevelFactory {
 					{G, R, G, B, R, G, R},
 					{B, R, G, G, B, G, B},
 					{B, B, R, B, G, R, G}},
-					-1);
+					5);
 		default:
 			return new LevelData(new int[][] {
 					{B, G, G, R},
