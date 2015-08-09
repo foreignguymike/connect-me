@@ -12,6 +12,7 @@ import com.distraction.cm.game.Header;
 import com.distraction.cm.game.LevelData;
 import com.distraction.cm.util.ClickListener;
 import com.distraction.cm.util.LevelItem;
+import com.distraction.cm.util.Res;
 import com.distraction.cm.util.Save;
 
 public class LevelSelectState extends State {
@@ -34,6 +35,10 @@ public class LevelSelectState extends State {
 	private int velyi;
 	
 	public LevelSelectState(GSM gsm) {
+		this(gsm, 0);
+	}
+	
+	public LevelSelectState(GSM gsm, int index) {
 		
 		super(gsm);
 		
@@ -49,12 +54,15 @@ public class LevelSelectState extends State {
 		
 		list = new ArrayList<LevelItem>();
 		for(int i = 0; i < LevelData.NUM_LEVELS; i++) {
-			LevelItem item = new LevelItem("Level " + (i + 1), Save.getNumStars(i));
+			LevelItem item = new LevelItem("Level " + (i + 1), Save.getNumStars(i, Res.data[i].getMinMoves()));
 			item.setIndex(i);
 			list.add(item);
 		}
 		listCam = new OrthographicCamera();
 		listCam.setToOrtho(false, cam.viewportWidth, cam.viewportHeight);
+		listCam.position.y -= index * LevelItem.HEIGHT;
+		setListCamBounds();
+		listCam.update();
 		
 		selectedLevel = -1;
 		
@@ -62,14 +70,39 @@ public class LevelSelectState extends State {
 		
 	}
 	
+	private void setListCamBounds() {
+		if(listCam.position.y > CM.HEIGHT / 2) {
+			listCam.position.y = CM.HEIGHT / 2;
+			listCamSpeed = 0;
+		}
+		if(listCam.position.y < CM.HEIGHT / 2 - (list.size() * LevelItem.HEIGHT - CM.HEIGHT + Header.HEIGHT)) {
+			listCam.position.y = CM.HEIGHT / 2 - (list.size() * LevelItem.HEIGHT - CM.HEIGHT + Header.HEIGHT);
+			listCamSpeed = 0;
+		}
+	}
+	
 	@Override
 	public void update(float dt) {
 		
 		if(selectedLevel > 0) {
-			PlayState newState = new PlayState(gsm, selectedLevel, list.get(selectedLevel - 1).getStars());
+			PlayState newState = new PlayState(gsm, selectedLevel);
 			CheckeredTransitionState state = new CheckeredTransitionState(gsm, this, newState);
 			gsm.set(state);
 			return;
+		}
+		
+		if(Gdx.input.isTouched()) {
+			unproject(m, cam);
+			if(useDry) {
+				vely[velyi] = m.y - dry;
+				listCam.position.y -= vely[velyi];
+				velyi++;
+				if(velyi == vely.length) {
+					velyi = 0;
+				}
+				listCam.update();
+				dry = m.y;
+			}
 		}
 		
 		if(listCamSpeed > 0) {
@@ -85,15 +118,7 @@ public class LevelSelectState extends State {
 			}
 		}
 		listCam.position.y += listCamSpeed;
-		
-		if(listCam.position.y > CM.HEIGHT / 2) {
-			listCam.position.y = CM.HEIGHT / 2;
-			listCamSpeed = 0;
-		}
-		if(listCam.position.y < CM.HEIGHT / 2 - (list.size() * LevelItem.HEIGHT - CM.HEIGHT + Header.HEIGHT)) {
-			listCam.position.y = CM.HEIGHT / 2 - (list.size() * LevelItem.HEIGHT - CM.HEIGHT + Header.HEIGHT);
-			listCamSpeed = 0;
-		}
+		setListCamBounds();
 		listCam.update();
 		
 	}
@@ -169,16 +194,12 @@ public class LevelSelectState extends State {
 		if(diff < -10 || diff > 10) {
 			dragged = true;
 		}
-		if(useDry) {
-			vely[velyi] = m.y - dry;
-			listCam.position.y -= vely[velyi];
-			velyi++;
-			if(velyi == vely.length) {
-				velyi = 0;
-			}
-			listCam.update();
-			dry = m.y;
-		}
+		return true;
+	}
+	
+	@Override
+	public boolean scrolled(int amount) {
+		listCam.position.y -= amount * LevelItem.HEIGHT;
 		return true;
 	}
 	

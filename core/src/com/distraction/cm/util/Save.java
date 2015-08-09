@@ -5,7 +5,6 @@ import java.io.BufferedReader;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.distraction.cm.game.LevelData;
-import com.distraction.cm.game.LevelFactory;
 
 public abstract class Save {
 	
@@ -26,13 +25,11 @@ public abstract class Save {
 	}
 	
 	public static void load() {
-		
 		FileHandle file = Gdx.files.internal(path);
-		
 		if(!file.exists()) {
 			save();
+			return;
 		}
-		
 		moves = new int[LevelData.NUM_LEVELS];
 		BufferedReader br = file.reader(1024);
 		for(int i = 0; i < moves.length; i++) {
@@ -41,10 +38,10 @@ public abstract class Save {
 				moves[i] = move;
 			}
 			catch(Exception e) {
-				e.printStackTrace();
+				save();
+				return;
 			}
 		}
-		
 	}
 	
 	public static void set(int i, int move) {
@@ -53,10 +50,15 @@ public abstract class Save {
 		}
 	}
 	
-	public static int getNumStars(int i) {
-		LevelData data = LevelFactory.getLevel(i + 1);
-		int minMoves = data.getMinMoves();
-		int move = moves[i];
+	public static int getNumStars(int i, int minMoves) {
+		return getNumStars(i, moves[i], minMoves);
+	}
+	
+	public static int getNumMoves(int i) {
+		return moves[i];
+	}
+	
+	public static int getNumStars(int i, int move, int minMoves) {
 		if(move == 0) {
 			return 0;
 		}

@@ -1,7 +1,7 @@
 package com.distraction.cm.game;
 
 public class LevelData {
-	public static final int NUM_LEVELS = 20;
+	public static final int NUM_LEVELS = 1;
 	private int[][] grid;
 	private int minMoves;
 	public LevelData(int[][] grid, int minMoves) {

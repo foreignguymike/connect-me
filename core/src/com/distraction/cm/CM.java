@@ -4,7 +4,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.distraction.cm.state.GSM;
-import com.distraction.cm.state.LevelSelectState;
+import com.distraction.cm.state.MenuState;
 import com.distraction.cm.util.Res;
 import com.distraction.cm.util.Save;
 
@@ -37,7 +37,7 @@ public class CM extends ApplicationAdapter {
 		sb = new SpriteBatch();
 		
 		gsm = new GSM();
-		gsm.push(new LevelSelectState(gsm));
+		gsm.push(new MenuState(gsm));
 		
 	}
 

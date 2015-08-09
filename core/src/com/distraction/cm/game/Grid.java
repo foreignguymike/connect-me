@@ -11,7 +11,6 @@ import com.distraction.cm.game.Cell.CellType;
 import com.distraction.cm.util.AnimationListener;
 import com.distraction.cm.util.GridListener;
 import com.distraction.cm.util.Res;
-import com.distraction.cm.util.Save;
 
 public class Grid implements AnimationListener {
 	
@@ -20,7 +19,7 @@ public class Grid implements AnimationListener {
 	public static int HEIGHT;
 	
 	private TextureRegion bg;
-	private Color bgColor = new Color(0x594d40ff);
+	private Color bgColor = Res.PRIMARY_COLOR;
 	
 	private Cell[][] grid;
 	private int numRows;
@@ -36,6 +35,8 @@ public class Grid implements AnimationListener {
 	private int numMoves;
 	
 	private GridListener listener;
+	
+	private boolean finished;
 	
 	public Grid(int[][] types) {
 		
@@ -87,14 +88,18 @@ public class Grid implements AnimationListener {
 		}
 	}
 	
-	public void move(int dx, int dy) {
+	public boolean move(int dx, int dy) {
+		
+		if(finished) {
+			return false;
+		}
 		
 		if(animationCount > 0) {
-			return;
+			return false;
 		}
 		
 		if(clickedCell == null) {
-			return;
+			return false;
 		}
 		
 		if(dx > 0) {
@@ -157,6 +162,8 @@ public class Grid implements AnimationListener {
 				numMoves++;
 			}
 		}
+		
+		return true;
 	}
 	
 	public boolean isFinished() {
@@ -173,15 +180,8 @@ public class Grid implements AnimationListener {
 				bfs(grid, visited, row, col);
 			}
 		}
+		finished = true;
 		return true;
-	}
-	
-	private void drop() {
-		for(int row = 0; row < numRows; row++) {
-			for(int col = 0; col < numCols; col++) {
-				grid[row][col].drop();
-			}
-		}
 	}
 	
 	private static class Index {
@@ -250,8 +250,6 @@ public class Grid implements AnimationListener {
 		
 	}
 	
-	///////////////////////////////////
-	
 	private int animationCount;
 	
 	@Override
@@ -263,9 +261,6 @@ public class Grid implements AnimationListener {
 	public void onFinished() {
 		animationCount--;
 		if(animationCount == 0 && isFinished()) {
-			System.out.println("numMoves: " + numMoves);
-			System.out.println("finished");
-//			drop();
 			listener.onFinished();
 		}
 	}

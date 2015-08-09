@@ -49,8 +49,6 @@ public class Cell {
 	
 	private AnimationListener listener;
 	
-	private boolean drop;
-	
 	public Cell(int type, float x, float y) {
 		cellType = cellTypeValues[type];
 		this.x = x;
@@ -91,19 +89,7 @@ public class Cell {
 				my > y && my < y + SIZE;
 	}
 	
-	public void drop() {
-		drop = true;
-		dx = (float) (Math.random() * 1000 - 500);
-		dy = (float) (Math.random() * 500 + 1500);
-	}
-	
 	public void update(float dt) {
-		if(drop) {
-			x += dx * dt;
-			y += dy * dt;
-			dy -= 8000 * dt;
-			return;
-		}
 		if(timer < introTime) {
 			timer += dt;
 			if(timer >= introTime) {

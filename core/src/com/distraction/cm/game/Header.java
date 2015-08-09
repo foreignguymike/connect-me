@@ -13,7 +13,7 @@ import com.distraction.cm.util.ImageButton;
 public class Header {
 	
 	private TextureRegion pixel;
-	private Color color = new Color(0x594d40ff);
+	private Color color = Res.PRIMARY_COLOR;
 	public static int HEIGHT = 70;
 	
 	private ImageButton back;
