@@ -62,7 +62,7 @@ public abstract class Save {
 		if(move == 0) {
 			return 0;
 		}
-		else if(move == minMoves) {
+		else if(move <= minMoves) {
 			return 4;
 		}
 		else if(move <= (int) (minMoves * 1.5f)) {

@@ -38,7 +38,7 @@ public class LevelSelectState extends State {
 		this(gsm, 0);
 	}
 	
-	public LevelSelectState(GSM gsm, int index) {
+	public LevelSelectState(final GSM gsm, int index) {
 		
 		super(gsm);
 		
@@ -48,7 +48,9 @@ public class LevelSelectState extends State {
 		header.setBackClickListener(new ClickListener() {
 			@Override
 			public void onClick() {
-				Gdx.app.exit();
+				MenuState newState = new MenuState(gsm);
+				CheckeredTransitionState state = new CheckeredTransitionState(gsm, LevelSelectState.this, newState);
+				gsm.set(state);
 			}
 		});
 		
@@ -60,7 +62,7 @@ public class LevelSelectState extends State {
 		}
 		listCam = new OrthographicCamera();
 		listCam.setToOrtho(false, cam.viewportWidth, cam.viewportHeight);
-		listCam.position.y -= index * LevelItem.HEIGHT;
+		listCam.position.y -= index * LevelItem.HEIGHT - CM.HEIGHT / 3;
 		setListCamBounds();
 		listCam.update();
 		

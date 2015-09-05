@@ -5,56 +5,77 @@ filter: Nearest,Nearest
 repeat: none
 grid_bg
   rotate: false
-  xy: 1, 80
+  xy: 1, 62
   size: 411, 411
   orig: 411, 411
   offset: 0, 0
   index: -1
+title
+  rotate: false
+  xy: 414, 328
+  size: 340, 145
+  orig: 340, 145
+  offset: 0, 0
+  index: -1
 grid_cell
   rotate: false
-  xy: 414, 344
+  xy: 414, 179
   size: 147, 147
   orig: 147, 147
   offset: 0, 0
   index: -1
-label
+button
   rotate: false
   xy: 1, 4
+  size: 185, 56
+  orig: 185, 56
+  offset: 0, 0
+  index: -1
+label
+  rotate: false
+  xy: 756, 399
   size: 123, 74
   orig: 123, 74
   offset: 0, 0
   index: -1
 star_off
   rotate: false
-  xy: 414, 285
+  xy: 414, 120
   size: 57, 57
   orig: 57, 57
   offset: 0, 0
   index: -1
 star_on
   rotate: false
-  xy: 563, 434
+  xy: 563, 269
   size: 57, 57
   orig: 57, 57
   offset: 0, 0
   index: -1
-next
+next_bg
   rotate: false
-  xy: 126, 22
+  xy: 188, 4
   size: 56, 56
   orig: 56, 56
   offset: 0, 0
   index: -1
 back
   rotate: false
-  xy: 414, 235
+  xy: 756, 349
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: -1
+next
+  rotate: false
+  xy: 881, 425
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
 refresh
   rotate: false
-  xy: 473, 294
+  xy: 414, 70
   size: 48, 48
   orig: 48, 48
   offset: 0, 0

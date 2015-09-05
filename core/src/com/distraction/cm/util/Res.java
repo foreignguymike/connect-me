@@ -23,10 +23,13 @@ public class Res {
 	
 	public static void init() {
 		fontMap = new HashMap<String, BitmapFont>();
-		createFont("fonts/Roboto-Black.ttf", "RobotoTitle", "LevlSct 0123456789", 32);
+		createFont("fonts/Roboto-Black.ttf", "RobotoTitle", "LevlSctTuoria 0123456789", 32);
 		createFont("fonts/RobotoCondensed-Regular.ttf", "RobotoLevelItem", "Levl 0123456789", 24);
-		createFont("fonts/Roboto-Black.ttf", "RobotoLabel", "TargetBsMov- 0123456789", 20);
-		PRIMARY_COLOR = new Color(0x594d40ff);
+		createFont("fonts/Roboto-Black.ttf", "RobotoLabel", "PlayTutoriOnegBsMv- 0123456789", 20);
+		createFont("fonts/RobotoCondensed-Regular.ttf", "RobotoDistraction", "distracon", 16);
+		createFont("fonts/Roboto-Black.ttf", "RobotoText", 24);
+//		PRIMARY_COLOR = new Color(0x594d40ff);
+		PRIMARY_COLOR = new Color(0x303d39ff);
 		data = new LevelData[LevelData.NUM_LEVELS];
 		loadFiles();
 	}
@@ -46,19 +49,7 @@ public class Res {
 					String[] split = line.split(",");
 					for(int col = 0; col < numCols; col++) {
 						String s = split[col];
-						int val = -1;
-						if(s.equals("R")) {
-							val = 0;
-						}
-						else if(s.equals("G")) {
-							val = 1;
-						}
-						else if(s.equals("B")) {
-							val = 2;
-						}
-						if(val == -1) {
-							Gdx.app.exit();
-						}
+						int val = Integer.parseInt(s);
 						g[row][col] = val;
 					}
 				}
@@ -69,6 +60,11 @@ public class Res {
 				Gdx.app.exit();
 			}
 		}
+	}
+	
+	private static void createFont(String path, String key, int size) {
+		String chars = FreeTypeFontGenerator.DEFAULT_CHARS;
+		createFont(path, key, chars, size);
 	}
 	
 	private static void createFont(String path, String key, String chars, int size) {

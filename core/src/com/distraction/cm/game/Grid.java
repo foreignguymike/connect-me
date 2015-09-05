@@ -260,7 +260,7 @@ public class Grid implements AnimationListener {
 	@Override
 	public void onFinished() {
 		animationCount--;
-		if(animationCount == 0 && isFinished()) {
+		if(animationCount == 0 && isFinished() && listener != null) {
 			listener.onFinished();
 		}
 	}

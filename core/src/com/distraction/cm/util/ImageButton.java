@@ -12,13 +12,25 @@ public class ImageButton {
 	private float height;
 	
 	private TextureRegion image;
+	private TextureRegion bg;
+	private float bwidth;
+	private float bheight;
 	
 	public ImageButton(TextureRegion image, float x, float y) {
+		this(image, x, y, null);
+	}
+	
+	public ImageButton(TextureRegion image, float x, float y, TextureRegion bg) {
 		this.image = image;
 		this.x = x;
 		this.y = y;
 		this.width = image.getRegionWidth();
 		this.height = image.getRegionHeight();
+		if(bg != null) {
+			this.bg = bg;
+			bwidth = bg.getRegionWidth();
+			bheight = bg.getRegionHeight();
+		}
 	}
 	
 	public boolean contains(float mx, float my) {
@@ -27,6 +39,10 @@ public class ImageButton {
 	}
 	
 	public void render(SpriteBatch sb) {
+		if(bg != null) {
+			sb.setColor(Res.PRIMARY_COLOR);
+			sb.draw(bg, x - bwidth / 2, y - bheight / 2);
+		}
 		sb.setColor(Color.WHITE);
 		sb.draw(image, x - width / 2, y - height / 2);
 	}

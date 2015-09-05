@@ -9,6 +9,7 @@ import com.distraction.cm.game.FinishStar;
 import com.distraction.cm.game.Grid;
 import com.distraction.cm.game.Header;
 import com.distraction.cm.game.Label;
+import com.distraction.cm.game.LevelData;
 import com.distraction.cm.util.ClickListener;
 import com.distraction.cm.util.GridListener;
 import com.distraction.cm.util.ImageButton;
@@ -91,7 +92,9 @@ public class PlayState extends State {
 					finishStars.add(star);
 				}
 				header.setStars(Save.getNumStars(level - 1, Res.data[level - 1].getMinMoves()));
-				next = new ImageButton(Res.getAtlas().findRegion("next"), CM.WIDTH - 55, 80);
+				if(level < LevelData.NUM_LEVELS) {
+					next = new ImageButton(Res.getAtlas().findRegion("next"), CM.WIDTH - 55, 80, Res.getAtlas().findRegion("next_bg"));
+				}
 			}
 		});
 	}
@@ -113,14 +116,14 @@ public class PlayState extends State {
 		sb.begin();
 		
 		grid.render(sb);
+		header.render(sb);
 		targetLabel.render(sb);
 		bestLabel.render(sb);
 		movesLabel.render(sb);
-		header.render(sb);
 		if(next != null) {
 			next.render(sb);
 		}
-		
+		sb.setColor(1, 1, 1, 1);
 		for(int i = 0; i < finishStars.size; i++) {
 			finishStars.get(i).render(sb);
 		}
