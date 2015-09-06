@@ -64,12 +64,14 @@ public class LevelItem {
 		font.setColor(fontColor);
 		font.draw(sb, text, TEXT_PADDING_X, y - TEXT_PADDING_Y);
 		sb.setColor(1, 1, 1, 1);
-		for(int i = 0; i < 4; i++) {
-			if(i < stars) {
-				sb.draw(starOn, STAR_PADDING + i * STAR_SPACING, y - HEIGHT + (HEIGHT - starOn.getRegionHeight()) / 2);
-			}
-			else {
-				sb.draw(starOff, STAR_PADDING + i * STAR_SPACING, y - HEIGHT + (HEIGHT - starOff.getRegionHeight()) / 2);
+		if(stars >= 0) {
+			for(int i = 0; i < 4; i++) {
+				if(i < stars) {
+					sb.draw(starOn, STAR_PADDING + i * STAR_SPACING, y - HEIGHT + (HEIGHT - starOn.getRegionHeight()) / 2);
+				}
+				else {
+					sb.draw(starOff, STAR_PADDING + i * STAR_SPACING, y - HEIGHT + (HEIGHT - starOff.getRegionHeight()) / 2);
+				}
 			}
 		}
 	}

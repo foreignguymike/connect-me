@@ -72,6 +72,11 @@ public class MenuState extends State {
 			CheckeredTransitionState state = new CheckeredTransitionState(gsm, this, nextState);
 			gsm.set(state);
 		}
+		else if(online.contains(m.x, m.y)) {
+			LevelSelectState nextState = new LevelSelectState(gsm, true);
+			CheckeredTransitionState state = new CheckeredTransitionState(gsm, this, nextState);
+			gsm.set(state);
+		}
 		return true;
 	}
 	

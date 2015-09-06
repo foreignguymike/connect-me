@@ -28,7 +28,7 @@ public class Label {
 	private float subtextHeight;
 	
 	public Label(String text, float x, float y) {
-		this.text = text;
+		setText(text);
 		this.x = x;
 		this.y = y;
 		
@@ -36,12 +36,15 @@ public class Label {
 		width = bg.getRegionWidth();
 		height = bg.getRegionHeight();
 		
+		setSubtext("0");
+	}
+	
+	public void setText(String text) {
+		this.text = text;
 		font = Res.getFont("RobotoLabel");
 		GlyphLayout gl = new GlyphLayout(font, text);
 		fontWidth = gl.width;
 		fontHeight = gl.height;
-		
-		setSubtext("0");
 	}
 	
 	public void setSubtext(String subtext) {

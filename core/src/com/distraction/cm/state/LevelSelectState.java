@@ -34,8 +34,22 @@ public class LevelSelectState extends State {
 	private float[] vely = new float[3];
 	private int velyi;
 	
+	private boolean global;
+	
 	public LevelSelectState(GSM gsm) {
 		this(gsm, 0);
+	}
+	
+	public LevelSelectState(GSM gsm, boolean global) {
+		this(gsm, 0);
+		this.global = true;
+		header.setTitle("Level Select - Global");
+		list.clear();
+		for(int i = 0; i < 10; i++) {
+			LevelItem item = new LevelItem("Level " + (i + 1), -1);
+			item.setIndex(i);
+			list.add(item);
+		}
 	}
 	
 	public LevelSelectState(final GSM gsm, int index) {
@@ -87,9 +101,16 @@ public class LevelSelectState extends State {
 	public void update(float dt) {
 		
 		if(selectedLevel > 0) {
-			PlayState newState = new PlayState(gsm, selectedLevel);
-			CheckeredTransitionState state = new CheckeredTransitionState(gsm, this, newState);
-			gsm.set(state);
+			if(global) {
+				PlayState newState = new PlayState(gsm, selectedLevel, true);
+				CheckeredTransitionState state = new CheckeredTransitionState(gsm, this, newState);
+				gsm.set(state);
+			}
+			else {
+				PlayState newState = new PlayState(gsm, selectedLevel);
+				CheckeredTransitionState state = new CheckeredTransitionState(gsm, this, newState);
+				gsm.set(state);
+			}
 			return;
 		}
 		

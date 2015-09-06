@@ -20,12 +20,13 @@ public class Res {
 	public static Color PRIMARY_COLOR;
 	
 	public static LevelData[] data;
+	public static LevelData[] global;
 	
 	public static void init() {
 		fontMap = new HashMap<String, BitmapFont>();
-		createFont("fonts/Roboto-Black.ttf", "RobotoTitle", "LevlSctTuoria 0123456789", 32);
+		createFont("fonts/Roboto-Black.ttf", "RobotoTitle", "LevlSctTuoriaGob 0123456789", 32);
 		createFont("fonts/RobotoCondensed-Regular.ttf", "RobotoLevelItem", "Levl 0123456789", 24);
-		createFont("fonts/Roboto-Black.ttf", "RobotoLabel", "PlayTutoriOnegBsMv- 0123456789", 20);
+		createFont("fonts/Roboto-Black.ttf", "RobotoLabel", "PlayTutoriOnegBsMv-d 0123456789", 20);
 		createFont("fonts/RobotoCondensed-Regular.ttf", "RobotoDistraction", "distracon", 16);
 		createFont("fonts/Roboto-Black.ttf", "RobotoText", 24);
 //		PRIMARY_COLOR = new Color(0x594d40ff);
@@ -37,6 +38,31 @@ public class Res {
 	private static void loadFiles() {
 		for(int i = 1; i <= LevelData.NUM_LEVELS; i++) {
 			String path = "level/" + i;
+			FileHandle file = Gdx.files.internal(path);
+			BufferedReader br = file.reader(1024);
+			try {
+				int minMoves = Integer.parseInt(br.readLine());
+				int numRows = Integer.parseInt(br.readLine());
+				int numCols = Integer.parseInt(br.readLine());
+				int[][] g = new int[numRows][numCols];
+				for(int row = 0; row < numRows; row++) {
+					String line = br.readLine();
+					String[] split = line.split(",");
+					for(int col = 0; col < numCols; col++) {
+						String s = split[col];
+						int val = Integer.parseInt(s);
+						g[row][col] = val;
+					}
+				}
+				data[i - 1] = new LevelData(g, minMoves);
+			}
+			catch(Exception e) {
+				e.printStackTrace();
+				Gdx.app.exit();
+			}
+		}
+		for(int i = 1; i <= 10; i++) {
+			String path = "global/" + i;
 			FileHandle file = Gdx.files.internal(path);
 			BufferedReader br = file.reader(1024);
 			try {

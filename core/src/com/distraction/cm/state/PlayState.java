@@ -31,9 +31,33 @@ public class PlayState extends State {
 	private Label targetLabel;
 	private Label bestLabel;
 	private Label movesLabel;
+	private Label globalLabel;
+	private Label globalBestLabel;
 	
 	private Array<FinishStar> finishStars;
 	private ImageButton next;
+	
+	private boolean global;
+	
+	public PlayState(GSM gsm, int level, boolean global) {
+		this(gsm, level);
+		this.global = global;
+		header.setTitle("Global Level " + level);
+		header.setStars(-1);
+		targetLabel.setText("1st");
+		targetLabel.setSubtext("-");
+		bestLabel.setText("2nd");
+		bestLabel.setSubtext("-");
+		movesLabel.setText("3rd");
+		movesLabel.setSubtext("-");
+		
+		globalLabel = new Label("Moves", CM.WIDTH / 2 + 75, 80);
+		globalLabel.setSubtext("0");
+		globalLabel.setText("Moves");
+		globalBestLabel = new Label("Best", CM.WIDTH / 2 - 75, 80);
+		globalBestLabel.setSubtext("0");
+		globalBestLabel.setText("Best");
+	}
 	
 	public PlayState(final GSM gsm, int level) {
 		
@@ -57,7 +81,12 @@ public class PlayState extends State {
 			@Override
 			public void onClick() {
 				createGrid();
-				movesLabel.setSubtext("0");
+				if(global) {
+					globalLabel.setSubtext("0");
+				}
+				else {
+					movesLabel.setSubtext("0");
+				}
 				finishStars.clear();
 				next = null;
 			}
@@ -83,20 +112,34 @@ public class PlayState extends State {
 		grid.setListener(new GridListener() {
 			@Override
 			public void onFinished() {
-				Save.set(level - 1, grid.getNumMoves());
-				Save.save();
-				bestLabel.setSubtext(Save.getNumMoves(level - 1) + "");
-				int newStars = Save.getNumStars(level - 1, grid.getNumMoves(), Res.data[level - 1].getMinMoves());
-				for(int i = 0; i < newStars; i++) {
-					FinishStar star = new FinishStar(CM.WIDTH / 2 - (newStars * FinishStar.SIZE) / 2 + FinishStar.SIZE * (i + 0.5f), 80, 0.2f * i);
-					finishStars.add(star);
+				if(global) {
+					
 				}
-				header.setStars(Save.getNumStars(level - 1, Res.data[level - 1].getMinMoves()));
-				if(level < LevelData.NUM_LEVELS) {
-					next = new ImageButton(Res.getAtlas().findRegion("next"), CM.WIDTH - 55, 80, Res.getAtlas().findRegion("next_bg"));
+				else {
+					Save.set(level - 1, grid.getNumMoves());
+					Save.save();
+					bestLabel.setSubtext(Save.getNumMoves(level - 1) + "");
+					int newStars = Save.getNumStars(level - 1, grid.getNumMoves(), Res.data[level - 1].getMinMoves());
+					for(int i = 0; i < newStars; i++) {
+						FinishStar star = new FinishStar(CM.WIDTH / 2 - (newStars * FinishStar.SIZE) / 2 + FinishStar.SIZE * (i + 0.5f), 80, 0.2f * i);
+						finishStars.add(star);
+					}
+					header.setStars(Save.getNumStars(level - 1, Res.data[level - 1].getMinMoves()));
+					if(level < LevelData.NUM_LEVELS) {
+						next = new ImageButton(Res.getAtlas().findRegion("next"), CM.WIDTH - 55, 80, Res.getAtlas().findRegion("next_bg"));
+					}
 				}
 			}
 		});
+	}
+	
+	private void updateMovesLabel() {
+		if(global) {
+			globalLabel.setSubtext(grid.getNumMoves() + "");
+		}
+		else {
+			movesLabel.setSubtext(grid.getNumMoves() + "");
+		}
 	}
 	
 	@Override
@@ -120,6 +163,10 @@ public class PlayState extends State {
 		targetLabel.render(sb);
 		bestLabel.render(sb);
 		movesLabel.render(sb);
+		if(global) {
+			globalLabel.render(sb);
+			globalBestLabel.render(sb);
+		}
 		if(next != null) {
 			next.render(sb);
 		}
@@ -152,22 +199,22 @@ public class PlayState extends State {
 		unproject(m, cam);
 		if(m.x > startx + DRAG_DIST) {
 			if(grid.move(1, 0)) {
-				movesLabel.setSubtext(grid.getNumMoves() + "");
+				updateMovesLabel();
 			}
 		}
 		else if(m.x < startx - DRAG_DIST) {
 			if(grid.move(-1, 0)) {
-				movesLabel.setSubtext(grid.getNumMoves() + "");
+				updateMovesLabel();
 			}
 		}
 		else if(m.y > starty + DRAG_DIST) {
 			if(grid.move(0, 1)) {
-				movesLabel.setSubtext(grid.getNumMoves() + "");
+				updateMovesLabel();
 			}
 		}
 		else if(m.y < starty - DRAG_DIST) {
 			if(grid.move(0, -1)) {
-				movesLabel.setSubtext(grid.getNumMoves() + "");
+				updateMovesLabel();
 			}
 		}
 		return true;
